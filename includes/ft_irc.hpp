@@ -4,6 +4,8 @@
 #include "Server.hpp"
 #include "macros.hpp"
 #include "utils.hpp"
+#include "Command.hpp"
+#include "CommandHandler.hpp"
 
 // to-do: add exception classes for more accurate representation of errors
 

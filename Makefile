@@ -34,11 +34,22 @@ NAME	= ircserv
 #_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_
 
 SRC_DIR = sources
-INC_DIR = include
+INC_DIR = includes
 BUILD_DIR = build
 
-SRCS = $(wildcard $(SRC_DIR)/*.cpp)
-OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
+SUBFOLDERS = . commands network utils \
+
+vpath %.cpp $(foreach subfolder, $(SUBFOLDERS), $(SRC_DIR)/$(subfolder))
+
+COMMAND_FILES	+= CommandHandler PASS
+NETWORK_FILES	+= Client Server
+UTILS_FILES		+= error utils
+
+MANDATORY_FILES += $(COMMAND_FILES) $(NETWORK_FILES) $(UTILS_FILES) main \
+
+OBJS = $(patsubst %, $(BUILD_DIR)/%.o, $(MANDATORY_FILES))
+#OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
+#SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 
 #_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_/=\_
 #_                                                                                           _
@@ -58,7 +69,7 @@ $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) -o $@ $^
 	@echo "$(GREEN)[ Compiled ]$(RESET) $(CYAN)$@$(RESET)"
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(BUILD_DIR)/%.o: %.cpp
 	@mkdir -p $(BUILD_DIR)
 	@$(CC) $(CFLAGS) -I$(INC_DIR) -o $@ -c $<
 

@@ -24,13 +24,12 @@ struct ClientInfo
 	std::string servername;
 	std::string realname;
 	std::string nickname;
-	std::string password;
 
 	int client_fd;
-	int pass_correct;
 	int user_correct;
 	int nick_correct;
-	int _operator;
+	bool isOperator;
+	bool isRegistered;
 };
 
 struct Channel

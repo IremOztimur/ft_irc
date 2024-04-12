@@ -8,7 +8,8 @@ void ClientInit(ClientInfo &user, int client_fd)
 	user.hostname = "";
 	user.servername = "";
 	user.realname = "";
-	user.pass_correct = 0;
 	user.user_correct = 0;
 	user.nick_correct = 0;
+	user.isOperator = false;
+	user.isRegistered = false;
 }

@@ -2,6 +2,7 @@
 
 #include "ft_irc.hpp"
 
+
 class Server
 {
 	protected:
@@ -20,4 +21,7 @@ class Server
 		void setup();
 		void ClientAccept();
 		void MessageHandler();
+
+		// Getters
+		std::string getPassword() const { return password; };
 };

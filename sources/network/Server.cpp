@@ -64,6 +64,7 @@ void Server::MessageHandler()
 			{
 				std::string buffer = parseMessage(poll_fd[i].fd);
 				//printf("Received message: %s\n", buffer.c_str());
+				//Process the Parsed Message
 			}
 			if (poll_fd[i].revents & POLLHUP)
 			{

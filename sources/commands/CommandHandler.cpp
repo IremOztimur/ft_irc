@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iremoztimur <iremoztimur@student.42.fr>    +#+  +:+       +#+        */
+/*   By: fsoymaz <fsoymaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:58:57 by iremoztimur       #+#    #+#             */
-/*   Updated: 2024/04/10 19:35:02 by iremoztimur      ###   ########.fr       */
+/*   Updated: 2024/05/07 00:56:32 by fsoymaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,15 @@
 CommandHandler::CommandHandler(Server *server): server(server)
 {
 	commands["PASS"] = new PASS(server, false);
+    commands["NICK"] = new NICK(server, false);
+    commands["USER"] = new USER(server, false);
+	commands["JOIN"] = new JOIN(server, true);
+	commands["PRIVMSG"] = new PRIVMSG(server, true);
+	commands["NOTICE"] = new NOTICE(server, true);
+	commands["WHO"] = new WHO(server, true);
+	commands["MODE"] = new MODE(server, true);
+	commands["PING"] = new PING(server, false);
+    commands["QUIT"] = new QUIT(server, true);
 }
 
 CommandHandler::~CommandHandler()

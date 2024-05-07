@@ -1,11 +1,11 @@
 #pragma once
 
 #include "structs.hpp"
+#include "Command.hpp"
+#include "CommandHandler.hpp"
 #include "Server.hpp"
 #include "macros.hpp"
 #include "utils.hpp"
-#include "Command.hpp"
-#include "CommandHandler.hpp"
 
 // to-do: add exception classes for more accurate representation of errors
 
@@ -21,7 +21,7 @@
  *                               if it falls outside the valid port range.
  */
 void isValidPort(std::string port);
-
+std::string Prefix(ClientInfo users);
 
 /**
  * Validates whether the provided string meets password requirements.

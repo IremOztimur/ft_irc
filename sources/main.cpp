@@ -21,14 +21,13 @@ int main(int argc, char **av)
 		try
 		{
 			isValidPort(av[1]);
-			isValidPassword(av[2]);
+			// isValidPassword(av[2]);
 			Server server(av[1], av[2]);
 			server.start();
-
 		}
-		catch(const std::exception& e)
+		catch (const std::exception &e)
 		{
-			std::cerr << RED << "ERROR: " << RESET << e.what()<< std::endl;
+			std::cerr << RED << "ERROR: " << RESET << e.what() << std::endl;
 		}
 	}
 	return (0);

@@ -1,8 +1,9 @@
 #include "../includes/ft_irc.hpp"
+#include <utils.hpp>
 
 std::string Prefix(ClientInfo users)
 {
-	return ":" + users.nickname + "!" + users.username + "@" + users.hostname;
+    return ":" + users.nickname + "!" + users.username + "@" + users.hostname;
 }
 
 void sender(int fd, const std::string msj)
@@ -32,3 +33,18 @@ std::string parseMessage(int fd)
 	else
 		return "";
 }
+
+
+// bool isPropertyInUse(Server *server, const std::string& value, ClientInfo *client, const std::string& errormessage)
+// {
+//     std::vector<ClientInfo>::const_iterator it;
+//     for (it = server->getClients().begin(); it != server->getClients().end(); ++it)
+//     {
+//         if (it->username == value)
+//         {
+//             sender(client->client_fd, errormessage);
+//             return true;
+//         }
+//     }
+//     return false;
+// }

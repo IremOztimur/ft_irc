@@ -23,7 +23,7 @@ WHITE 	= \033[1;37m
 CC		= g++
 RM		= rm -rf
 AR		= ar -rcs
-CFLAGS	= -Wall -Wextra -Werror -std=c++98
+CFLAGS	= -Wall -Wextra -Werror -std=c++98 -g -fsanitize=address
 
 NAME	= ircserv
 
@@ -41,7 +41,7 @@ SUBFOLDERS = . commands network utils \
 
 vpath %.cpp $(foreach subfolder, $(SUBFOLDERS), $(SRC_DIR)/$(subfolder))
 
-COMMAND_FILES	+= CommandHandler PASS
+COMMAND_FILES	+= CommandHandler PASS NICK USER JOIN PRIVMSG NOTICE WHO MODE PING QUIT
 NETWORK_FILES	+= Client Server
 UTILS_FILES		+= error utils
 

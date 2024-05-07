@@ -1,11 +1,22 @@
 #include "../includes/Server.hpp"
 
-Server::Server(std::string port, std::string password): port(port), password(password){}
+void Server::WELCOME(int i)
+{
+    sender(clients[i].client_fd, RPL_WELCOME(clients[i].hostname, clients[i].nickname, clients[i].username, clients[i].hostname));
+    sender(clients[i].client_fd, RPL_YOURHOST(clients[i].hostname, clients[i].nickname));
+    sender(clients[i].client_fd, RPL_CREATED(clients[i].hostname, clients[i].nickname));
+}
 
+Server::Server(std::string port, std::string password): port(port), password(password){
+    // Initialize the commandHandler object
+    commandHandler = new CommandHandler(this);
+}
 Server::~Server()
 {
 	std::cout << RED << "-----------------------" << RESET << std::endl;
 	std::cout << RED << "Server destroyed" << RESET << std::endl;
+	delete commandHandler;
+	close(socket_fd);
 }
 
 void Server::start()
@@ -53,27 +64,34 @@ void Server::setup()
 	poll_fd[0].events = POLLIN;
 }
 
+
 void Server::MessageHandler()
 {
-	for (size_t i = 0; i < poll_fd.size(); i++)
-	{
-		if (poll_fd[i].revents & POLLIN)
-		{
-			ClientAccept();
-			if (i != 0)
-			{
-				std::string buffer = parseMessage(poll_fd[i].fd);
-				//printf("Received message: %s\n", buffer.c_str());
-				//Process the Parsed Message
-			}
-			if (poll_fd[i].revents & POLLHUP)
-			{
-				//QUIT("Control + C", i - 1);
-				continue;
-			}
-		}
-	}
+    for (size_t i = 0; i < poll_fd.size(); i++)
+    {
+        if (poll_fd[i].revents & POLLIN || poll_fd[i].revents & POLL_HUP)
+        {
+            if (poll_fd[i].revents & POLLHUP) {
+                // İstemci bağlantısını kapattı
+                // İstemciyi poll_fd ve clients vektöründen kaldır
+                close(poll_fd[i].fd);
+                poll_fd.erase(poll_fd.begin() + i);
+                clients.erase(clients.begin() + i - 1);
+                continue;
+            }
+
+            ClientAccept();
+            if (i != 0)
+            {
+                std::string buffer = parseMessage(poll_fd[i].fd);
+                commandHandler->invoke(buffer, &clients[i-1]);
+                // Don't forget to delete the client object when you're done with it
+                // delete client;
+            }
+        }
+    }
 }
+
 
 void Server::ClientAccept()
 {
@@ -103,4 +121,3 @@ void Server::ClientAccept()
 			printf("New connection %d\n" , client_fd);
 		}
 }
-

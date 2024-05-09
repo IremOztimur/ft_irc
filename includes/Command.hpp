@@ -6,7 +6,7 @@
 /*   By: fsoymaz <fsoymaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:05:08 by iremoztimur       #+#    #+#             */
-/*   Updated: 2024/05/07 00:56:36 by fsoymaz          ###   ########.fr       */
+/*   Updated: 2024/05/08 18:28:59 by fsoymaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,15 @@ class PING: public Command
 	public:
 		PING(Server *server, bool isAutherized);
 		~PING();
+
+		void execute(std::vector<std::string> command, ClientInfo *client);
+};
+
+class PART: public Command
+{
+	public:
+		PART(Server *server, bool isAutherized);
+		~PART();
 
 		void execute(std::vector<std::string> command, ClientInfo *client);
 };

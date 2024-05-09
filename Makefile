@@ -41,7 +41,7 @@ SUBFOLDERS = . commands network utils \
 
 vpath %.cpp $(foreach subfolder, $(SUBFOLDERS), $(SRC_DIR)/$(subfolder))
 
-COMMAND_FILES	+= CommandHandler PASS NICK USER JOIN PRIVMSG NOTICE WHO MODE PING QUIT
+COMMAND_FILES	+= CommandHandler PASS NICK USER JOIN PRIVMSG NOTICE WHO MODE PART QUIT
 NETWORK_FILES	+= Client Server
 UTILS_FILES		+= error utils
 

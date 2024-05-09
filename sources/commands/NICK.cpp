@@ -10,7 +10,7 @@ void NICK::execute(std::vector<std::string> command, ClientInfo *client)
     {
         client->nickname = command[0];
         client->isRegistered = true;
-        sender(client->client_fd, Prefix(*client) + client->nickname);
+        sender(client->client_fd, Prefix(*client));
         server->WELCOME(client->client_fd - 4);
     }
 };

@@ -24,3 +24,5 @@ void sender(int fd, const std::string msj);
  * @throws std::runtime_error If there's an error receiving data.
  */
 std::string parseMessage(int fd);
+
+int isClientInChannel(ClientInfo client, Channel channel);

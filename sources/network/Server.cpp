@@ -2,7 +2,7 @@
 
 void Server::WELCOME(int i)
 {
-    sender(clients[i].client_fd, RPL_WELCOME(clients[i].hostname, clients[i].nickname, clients[i].username, clients[i].hostname));
+    sender(clients[i].client_fd, RPL_WELCOME(clients[i].hostname, clients[i].nickname, clients[i].username));
     sender(clients[i].client_fd, RPL_YOURHOST(clients[i].hostname, clients[i].nickname));
     sender(clients[i].client_fd, RPL_CREATED(clients[i].hostname, clients[i].nickname));
 }
@@ -64,7 +64,6 @@ void Server::setup()
 	poll_fd[0].events = POLLIN;
 }
 
-
 void Server::MessageHandler()
 {
     for (size_t i = 0; i < poll_fd.size(); i++)
@@ -75,7 +74,19 @@ void Server::MessageHandler()
                 // İstemci bağlantısını kapattı
                 // İstemciyi poll_fd ve clients vektöründen kaldır
                 close(poll_fd[i].fd);
-                poll_fd.erase(poll_fd.begin() + i);
+                poll_fd.erase(poll_fd.begin() + i); 
+				for (size_t j = 0; j < channels.size(); ++j)
+				{
+					if (isClientInChannel(clients[i - 1], channels[j]))
+					{
+						// Call PART command for each channel the client is in
+						PART partCommand(this, true);
+						std::vector<std::string> partArgs;
+						partArgs.push_back(channels[j].name);
+						partCommand.execute(partArgs, &clients[i - 1]);
+						partCommand.~PART();
+					}
+				}
                 clients.erase(clients.begin() + i - 1);
                 continue;
             }

@@ -48,3 +48,14 @@ std::string parseMessage(int fd)
 //     }
 //     return false;
 // }
+
+
+int isClientInChannel(ClientInfo client, Channel channel)
+{
+	for (size_t i = 0; i < channel.clients.size(); ++i)
+	{
+		if (client.client_fd == channel.clients[i].client_fd)
+			return true;
+	}
+	return false;
+}

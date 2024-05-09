@@ -15,7 +15,7 @@
 #define MAGENTA "\033[35m"
 
 // ERROR MESSAGES
-#define RPL_WELCOME(hostname, nickName, user, host) (std::string(":")  + " 001 " + nickName + " :Welcome to the Internet Relay Network " + nickName + "!" + user + "@" + host + "\r\n")
+#define RPL_WELCOME(hostname, nickName, user) (std::string(":")  + " 001 " + nickName + " :Welcome to the Internet Relay Network " + nickName + "!" + user + "@"  + "\r\n")
 #define RPL_YOURHOST(hostname, nickName) (std::string(":") + hostname + " 002 " + nickName + " :Your host is "  + hostname + "\r\n")
 #define RPL_CREATED(hostname, nickName) (std::string(":") + hostname + " 003 " + nickName + " :This server was created " +  "\r\n")
 
@@ -39,5 +39,5 @@
 #define ERR_PASSWDMISMATCH(hostname, nickName) (std::string(":") + hostname + " 464 " + nickName + " :Password incorrect" + "\r\n")
 #define ERR_CHANOPRIVSNEEDED(hostname, nickName, channel) (std::string(":") + hostname + " 482 " + nickName + " " + channel + " :You're not channel operator" + "\r\n")
 #define ERR_UMODEUNKNOWNFLAG(hostname) (std::string(":") + hostname + " 501 " + ":Unknown MODE flag" + "\r\n")
-#define RPL_WHOREPLY(channel, nickname, username, hostname, servername, nickname2, hopcount, realname) (":irc.bm.com 352 " + channel + " " + nickname + " " + username + " " + hostname + " " + servername + " " + nickname2 + " " + hopcount + " " + realname + " H :0 " + realname + "\r\n")
+#define RPL_WHOREPLY(channel, nickname, username, hostname, servername, nickname2, hopcount, realname) (":myIRCServ 352 " + channel + " " + nickname + " " + username + " " + hostname + " " + servername + " " + nickname2 + " " + hopcount + " " + realname + " H :0 " + realname + "\r\n")
 #define RPL_PASS(hostname, nickName) (std::string(":") + hostname + " 462 " + nickName + " :Password correct" + "\r\n")

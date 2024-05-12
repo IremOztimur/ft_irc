@@ -12,9 +12,10 @@ void TOPIC::execute(const std::vector<std::string> command, ClientInfo* client) 
     if (topic[0] == ':') {
         topic = topic.substr(1);
     }
-
-
     for (size_t i = 0; i < server->getChannels().size(); ++i) {
+		//for (size_t k = 0; k < server->getChannels()[i].operators[k].size(); ++k) {
+
+		//}
         if (server->getChannels()[i].name == channel) {
             for (size_t j = 0; j < server->getChannels()[i].operators.size(); ++j) {
                 if (server->getChannels()[i].operators[j] == client->client_fd) {

@@ -21,7 +21,7 @@ void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 			{
 				if (channels[j].operators[k] == client->client_fd)
 				{
-					for (std::vector<ClientInfo>::size_type m = 0; m != channels[j].clients.size(); ++m)
+					for (size_t m = 0; m != channels[j].clients.size(); ++m)
 					{
 						if (channels[j].clients[m].nickname == user)
 						{
@@ -37,18 +37,9 @@ void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 							else if (mode == "-o")
 							{
 								channels[j].clients[m].isOperator = false;
-								//for (std::vector<int>::size_type t = channels[j].operators.size(); t > 0; --t)
-								//{
-								//	if (channels[j].operators[t - 1] == channels[j].clients[m].client_fd)
-								//		channels[j].operators.erase(channels[j].operators.begin() + (t - 1));
-								//}
+								
 								for (unsigned long t = 0; t < channels[j].clients.size(); t++)
 									sender(channels[j].clients[t].client_fd, Prefix(channels[j].clients[m]) + " MODE " + channel + " -o " + user + "\r\n");
-							}
-							else
-							{
-								// sender function needs to be implemented
-								// ERR_UMODEUNKNOWNFLAG needs to be defined
 							}
 						}
 					}

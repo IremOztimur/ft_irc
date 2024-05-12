@@ -21,7 +21,8 @@ void TOPIC::execute(const std::vector<std::string> command, ClientInfo *client)
 			bool isOperator = false;
 			for (size_t j = 0; j < server->getChannels()[i].operators.size(); ++j)
 			{
-				if (server->getChannels()[i].operators[j] == client->client_fd)
+				std::cout << "server->getChannels()[i].operators[j] = " << server->getChannels()[i].operators[j] << std::endl;
+				if (server->getChannels()[i].operators[j] == client->client_fd && server->getChannels()[i].clients[j].isOperator)
 				{
 					isOperator = true;
 					server->getChannels()[i].topic = topic;

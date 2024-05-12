@@ -13,12 +13,10 @@ void TOPIC::execute(const std::vector<std::string> command, ClientInfo* client) 
         topic = topic.substr(1);
     }
     for (size_t i = 0; i < server->getChannels().size(); ++i) {
-		//for (size_t k = 0; k < server->getChannels()[i].operators[k].size(); ++k) {
-
-		//}
         if (server->getChannels()[i].name == channel) {
             for (size_t j = 0; j < server->getChannels()[i].operators.size(); ++j) {
-                if (server->getChannels()[i].operators[j] == client->client_fd) {
+                if (server->getChannels()[i].operators[j] == client->client_fd)
+				{
                     server->getChannels()[i].topic = topic;
                     if (server->getChannels()[i].topic.empty()) {
                         server->getChannels()[i].topic = "No topic is set";
@@ -28,6 +26,8 @@ void TOPIC::execute(const std::vector<std::string> command, ClientInfo* client) 
                     }
                     break;
                 }
+				else
+				sender(client->client_fd, ERR_CHANOPRIVSNEEDED(client->hostname, client->nickname, channel));
             }
             break;
         }

@@ -35,7 +35,7 @@ void USER::execute(std::vector<std::string> command, ClientInfo *client)
 		{
 			client->isRegistered = true;
 			std::cout << "Client " << client->nickname << " is registered." << std::endl;
-			sender(client->client_fd, "User registered !\r\n");
+			sender(client->client_fd, Prefix(*client) + "User registered !\r\n");
 			server->WELCOME(client);
 		}
 	}

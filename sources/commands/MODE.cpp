@@ -17,7 +17,7 @@ void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 	{
 		if (channels[j].name == channel)
 		{
-			for (std::vector<int>::size_type k = 0; k != channels[j].operators.size(); ++k)
+			for (size_t k = 0; k != channels[j].operators.size(); ++k)
 			{
 				if (channels[j].operators[k] == client->client_fd)
 				{
@@ -27,6 +27,8 @@ void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 						{
 							if (mode == "+o")
 							{
+								if (client->client_fd == channels[j].clients[m].client_fd)
+									return;
 								channels[j].clients[m].isOperator = true;
 								channels[j].operators.push_back(channels[j].clients[m].client_fd);
 								for (unsigned long t = 0; t < channels[j].clients.size(); t++)

@@ -26,7 +26,7 @@ class Server
 		void setup();
 		void ClientAccept();
 		void MessageHandler();
-        void WELCOME(int i);
+        void WELCOME(ClientInfo *client);
     void removeClient(int client_fd);
     const std::vector<ClientInfo>& getClients() const { return clients; }
 

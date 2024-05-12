@@ -6,7 +6,7 @@
 /*   By: fsoymaz <fsoymaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:05:08 by iremoztimur       #+#    #+#             */
-/*   Updated: 2024/05/08 18:28:59 by fsoymaz          ###   ########.fr       */
+/*   Updated: 2024/05/09 23:12:02 by fsoymaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,24 @@ class PART: public Command
 	public:
 		PART(Server *server, bool isAutherized);
 		~PART();
+
+		void execute(std::vector<std::string> command, ClientInfo *client);
+};
+
+class KICK: public Command
+{
+	public:
+		KICK(Server *server, bool isAutherized);
+		~KICK();
+
+		void execute(std::vector<std::string> command, ClientInfo *client);
+};
+
+class TOPIC: public Command
+{
+	public:
+		TOPIC(Server *server, bool isAutherized);
+		~TOPIC();
 
 		void execute(std::vector<std::string> command, ClientInfo *client);
 };

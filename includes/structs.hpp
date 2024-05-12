@@ -38,5 +38,4 @@ struct Channel
 	std::vector<ClientInfo> clients;
 	std::vector<int> operators;
 	std::string topic;
-	size_t nextClientIndex;
 };

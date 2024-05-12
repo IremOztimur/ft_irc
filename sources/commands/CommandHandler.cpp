@@ -6,7 +6,7 @@
 /*   By: fsoymaz <fsoymaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:58:57 by iremoztimur       #+#    #+#             */
-/*   Updated: 2024/05/08 18:29:15 by fsoymaz          ###   ########.fr       */
+/*   Updated: 2024/05/09 23:12:35 by fsoymaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,10 @@ CommandHandler::CommandHandler(Server *server): server(server)
 	commands["NOTICE"] = new NOTICE(server, true);
 	commands["WHO"] = new WHO(server, true);
 	commands["MODE"] = new MODE(server, true);
-	//commands["PING"] = new PING(server, false);
+	commands["PING"] = new PING(server, false);
+	commands["TOPIC"] = new TOPIC(server, true);
 	commands["PART"] = new PART(server, true);
+	commands["KICK"] = new KICK(server, true);
     commands["QUIT"] = new QUIT(server, true);
 }
 

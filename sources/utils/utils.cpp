@@ -25,6 +25,7 @@ std::string parseMessage(int fd)
 	{
 		buffer[recvSize] = '\0';
 		std::string receivedData = buffer;
+		std::cout << "readed = " << receivedData << std::endl;
 		size_t newlinePos = receivedData.find_first_of("\r\n");
 		std::string parsedMessage = receivedData.substr(0, newlinePos);
 

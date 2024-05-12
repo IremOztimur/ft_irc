@@ -2,7 +2,6 @@
 
 #include "ft_irc.hpp"
 
-
 // COLOR CODES
 #define RESET "\033[39m"
 #define RED "\033[31m"
@@ -15,9 +14,9 @@
 #define MAGENTA "\033[35m"
 
 // ERROR MESSAGES
-#define RPL_WELCOME(hostname, nickName, user) (std::string(":")  + " 001 " + nickName + " :Welcome to the Internet Relay Network " + nickName + "!" + user + "@"  + "\r\n")
-#define RPL_YOURHOST(hostname, nickName) (std::string(":") + hostname + " 002 " + nickName + " :Your host is "  + hostname + "\r\n")
-#define RPL_CREATED(hostname, nickName) (std::string(":") + hostname + " 003 " + nickName + " :This server was created " +  "\r\n")
+#define RPL_WELCOME(hostname, nickName, user) (std::string(":") + " 001 " + nickName + " :Welcome to the Internet Relay Network " + nickName + "!" + user + "@" + "\r\n")
+#define RPL_YOURHOST(hostname, nickName) (std::string(":") + hostname + " 002 " + nickName + " :Your host is " + hostname + "\r\n")
+#define RPL_CREATED(hostname, nickName) (std::string(":") + hostname + " 003 " + nickName + " :This server was created " + "\r\n")
 
 #define RPL_NOTOPIC(hostname, nickName, channel) (std::string(":") + hostname + " 331 " + nickName + " " + channel + " :No topic is set" + "\r\n")
 #define RPL_TOPIC(hostname, nickName, channel, topic) (std::string(":") + hostname + " 332 " + nickName + " " + channel + " :" + topic + "\r\n")
@@ -39,5 +38,7 @@
 #define ERR_PASSWDMISMATCH(hostname, nickName) (std::string(":") + hostname + " 464 " + nickName + " :Password incorrect" + "\r\n")
 #define ERR_CHANOPRIVSNEEDED(hostname, nickName, channel) (std::string(":") + hostname + " 482 " + nickName + " " + channel + " :You're not channel operator" + "\r\n")
 #define ERR_UMODEUNKNOWNFLAG(hostname) (std::string(":") + hostname + " 501 " + ":Unknown MODE flag" + "\r\n")
-#define RPL_WHOREPLY(channel, nickname, username, hostname, servername, nickname2, hopcount, realname) (":myIRCServ 352 " + channel + " " + nickname + " " + username + " " + hostname + " " + servername + " " + nickname2 + " " + hopcount + " " + realname + " H :0 " + realname + "\r\n")
+#define RPL_WHOREPLY(channel, nickname, username, hostname, realname) (":myIRCServ 352 " + channel + " " + nickname + " " + username + " " + hostname + " myIRCServ " + nickname + " 1 " + realname + " H :0 " + realname + "\r\n")
 #define RPL_PASS(hostname, nickName) (std::string(":") + hostname + " 462 " + nickName + " :Password correct" + "\r\n")
+#define ERR_TOOMANYTARGETS(hostname, nickName, cmd) (std::string(":") + hostname + " 407 " + nickName + " " + cmd + " :Too many targets" + "\r\n")
+#define ERR_NOPRIVILEGES(hostName, nickName) "Error: No privileges for " + std::string(hostName) + " with nickname " + std::string(nickName)

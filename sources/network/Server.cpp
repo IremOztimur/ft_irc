@@ -1,15 +1,17 @@
 #include "../includes/Server.hpp"
 
-void Server::WELCOME(int i)
+void Server::WELCOME(ClientInfo *client)
 {
-    sender(clients[i].client_fd, RPL_WELCOME(clients[i].hostname, clients[i].nickname, clients[i].username));
-    sender(clients[i].client_fd, RPL_YOURHOST(clients[i].hostname, clients[i].nickname));
-    sender(clients[i].client_fd, RPL_CREATED(clients[i].hostname, clients[i].nickname));
+	printf("%s\n", client->nickname.c_str());
+	sender(client->client_fd, RPL_WELCOME(client->hostname, client->nickname, client->username));
+	sender(client->client_fd, RPL_YOURHOST(client->hostname, client->nickname));
+	sender(client->client_fd, RPL_CREATED(client->hostname, client->nickname));
 }
 
-Server::Server(std::string port, std::string password): port(port), password(password){
-    // Initialize the commandHandler object
-    commandHandler = new CommandHandler(this);
+Server::Server(std::string port, std::string password) : port(port), password(password)
+{
+	// Initialize the commandHandler object
+	commandHandler = new CommandHandler(this);
 }
 Server::~Server()
 {
@@ -66,15 +68,14 @@ void Server::setup()
 
 void Server::MessageHandler()
 {
-    for (size_t i = 0; i < poll_fd.size(); i++)
-    {
-        if (poll_fd[i].revents & POLLIN || poll_fd[i].revents & POLL_HUP)
-        {
-            if (poll_fd[i].revents & POLLHUP) {
-                // İstemci bağlantısını kapattı
-                // İstemciyi poll_fd ve clients vektöründen kaldır
-                close(poll_fd[i].fd);
-                poll_fd.erase(poll_fd.begin() + i); 
+	for (size_t i = 0; i < poll_fd.size(); i++)
+	{
+		if (poll_fd[i].revents & POLLIN || poll_fd[i].revents & POLL_HUP)
+		{
+			if (poll_fd[i].revents & POLLHUP)
+			{
+				close(poll_fd[i].fd);
+
 				for (size_t j = 0; j < channels.size(); ++j)
 				{
 					if (isClientInChannel(clients[i - 1], channels[j]))
@@ -87,48 +88,58 @@ void Server::MessageHandler()
 						partCommand.~PART();
 					}
 				}
-                clients.erase(clients.begin() + i - 1);
-                continue;
-            }
 
-            ClientAccept();
-            if (i != 0)
-            {
-                std::string buffer = parseMessage(poll_fd[i].fd);
-                commandHandler->invoke(buffer, &clients[i-1]);
-                // Don't forget to delete the client object when you're done with it
-                // delete client;
-            }
-        }
-    }
+				clients.erase(clients.begin() + i - 1);
+				poll_fd.erase(poll_fd.begin() + i);
+				std::cout << "Client disconnected" << std::endl;
+				continue;
+			}
+
+			ClientAccept();
+			if (i != 0)
+			{
+				std::string buffer = parseMessage(poll_fd[i].fd);
+
+				// Find the corresponding client and pass it to the command handler
+				for (size_t j = 0; j < clients.size(); j++)
+				{
+					if (clients[j].client_fd == poll_fd[i].fd)
+					{
+						commandHandler->invoke(buffer, &clients[j]);
+						break;
+					}
+				}
+			}
+		}
+	}
 }
-
-
 void Server::ClientAccept()
 {
-		if (poll_fd[0].revents & POLLIN) {
-			sockaddr_in6 client_addr;
-			socklen_t client_len = sizeof(client_addr);
-            int client_fd = accept(this->socket_fd, reinterpret_cast<sockaddr *>(&client_addr), &client_len);
-            if (client_fd < 0)
-                throw std::runtime_error("accept error");
-            else {
-                ClientInfo client;
-                ClientInit(client, client_fd);
+	if (poll_fd[0].revents & POLLIN)
+	{
+		sockaddr_in6 client_addr;
+		socklen_t client_len = sizeof(client_addr);
+		int client_fd = accept(this->socket_fd, reinterpret_cast<sockaddr *>(&client_addr), &client_len);
+		if (client_fd < 0)
+			throw std::runtime_error("accept error");
+		else
+		{
+			ClientInfo client;
+			ClientInit(client, client_fd);
 
-                char ipstr[INET6_ADDRSTRLEN];
-                inet_ntop(AF_INET6, &(client_addr.sin6_addr), ipstr, sizeof(ipstr));
+			char ipstr[INET6_ADDRSTRLEN];
+			inet_ntop(AF_INET6, &(client_addr.sin6_addr), ipstr, sizeof(ipstr));
 
-                sender(client.client_fd, "Welcome to the server, please enter your password: |COMMAND:PASS|\r\n");
+			sender(client.client_fd, "Welcome to the server, please enter your password: |COMMAND:PASS|\r\n");
 
-                this->clients.push_back(client);
-                std::cout << "New connection from " << ipstr << ":" << ntohs(client_addr.sin6_port) << std::endl;
-                fcntl(client_fd, F_SETFL, O_NONBLOCK);
+			this->clients.push_back(client);
+			std::cout << "New connection from " << ipstr << ":" << ntohs(client_addr.sin6_port) << std::endl;
+			fcntl(client_fd, F_SETFL, O_NONBLOCK);
 
-                poll_fd.resize(poll_fd.size() + 1);
-                poll_fd[poll_fd.size() - 1].fd = client_fd;
-                poll_fd[poll_fd.size() - 1].events = POLLIN;
-			}
-			printf("New connection %d\n" , client_fd);
+			poll_fd.resize(poll_fd.size() + 1);
+			poll_fd[poll_fd.size() - 1].fd = client_fd;
+			poll_fd[poll_fd.size() - 1].events = POLLIN;
 		}
+		printf("New connection %d\n", client_fd);
+	}
 }

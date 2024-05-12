@@ -43,11 +43,16 @@ void PRIVMSG::execute(std::vector<std::string> command, ClientInfo *client)
         {
             if (server->getChannels()[i].name == target)
             {
+                std::cout << "--->in" << std::endl;
                 std::string fullMessage = Prefix(*client) + " PRIVMSG " + target + " :" + message + "\r\n";
-
-                for (size_t j = 0; j <  server->getChannels()[i].clients.size(); j++)
+                std::cout << "size = " << server->getChannels()[i].clients.size() << std::endl;
+                for (size_t j = 0; j < server->getChannels()[i].clients.size(); j++)
                     if ( server->getChannels()[i].clients[j].nickname != client->nickname)
-                        sender( server->getChannels()[i].clients[j].client_fd, fullMessage);
+                    {
+                        std::cout << server->getChannels()[i].clients[j].client_fd << std::endl;
+                        sender(server->getChannels()[i].clients[j].client_fd, fullMessage);
+                    }
+                std::cout << "---------------------" << "\n";
                 break;
             }
         }

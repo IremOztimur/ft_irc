@@ -38,8 +38,8 @@ void PART::execute(std::vector<std::string> command, ClientInfo *client)
 					else if (server->getChannels()[j].operators.empty() && server->getChannels()[j].clients.size() > 0)
 					{
 						std::string modeMessage = "MODE " + channel + " +o " + server->getChannels()[j].clients[0].nickname + "\r\n";
-						// server->getChannels()[j].clients[0].isOperator = true;
-						// server->getChannels()[j].operators.push_back(server->getChannels()[j].clients[0].client_fd);
+						server->getChannels()[j].operators.push_back(server->getChannels()[j].clients[0].client_fd);
+						server->getChannels()[j].clients[0].isOperator = true;
 						for (unsigned long b = 0; b < server->getChannels()[j].clients.size(); b++)
 						{
 							sender(server->getChannels()[j].clients[b].client_fd, modeMessage);

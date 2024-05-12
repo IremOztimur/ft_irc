@@ -15,7 +15,7 @@ void USER::execute(std::vector<std::string> command, ClientInfo *client)
         // }
         if (command.size() != 4)
         {
-            sender(client->client_fd, ERR_NEEDMOREPARAMS(client->hostname, client->nickname, "USER"));
+            sender(client->client_fd, ERR_NEEDMOREPARAMS(client->hostname, client->nickname, "USER") + "you need 4 parameters\r\n");
             return;
         }
         client->username = command[0];
@@ -24,6 +24,7 @@ void USER::execute(std::vector<std::string> command, ClientInfo *client)
         client->realname = command[3];
 
         client->isRegistered = true;
+		client->user_correct = true;
         std::cout << "Client " << client->nickname << " is registered." << std::endl;
 		    sender(client->client_fd, "User registered !\r\n");
         sender(client->client_fd, "Please enter your nick |COMMAND:NICK|\r\n");

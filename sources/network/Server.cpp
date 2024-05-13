@@ -2,7 +2,6 @@
 
 void Server::WELCOME(ClientInfo *client)
 {
-	printf("%s\n", client->nickname.c_str());
 	sender(client->client_fd, RPL_WELCOME(client->hostname, client->nickname, client->username));
 	sender(client->client_fd, RPL_YOURHOST(client->hostname, client->nickname));
 	sender(client->client_fd, RPL_CREATED(client->hostname, client->nickname));

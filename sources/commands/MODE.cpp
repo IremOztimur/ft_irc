@@ -7,8 +7,6 @@ MODE::~MODE() {}
 void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 {
 	std::string channel, mode, user;
-	if (command.size() < 3)
-		return;
 	channel = command[0];
 	user = command[1];
 	mode = command[2];
@@ -21,6 +19,13 @@ void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 			{
 				if (channels[j].operators[k] == client->client_fd)
 				{
+					if (user == "+i" || user == "-i")
+					{
+						channels[j].isPublic = (user == "+i") ? false : true;
+						for (unsigned long t = 0; t < channels[j].clients.size(); t++)
+							sender(channels[j].clients[t].client_fd, Prefix(*client) + " MODE " + channel + " " + user + "\r\n");
+						return;
+					}
 					for (size_t m = 0; m != channels[j].clients.size(); ++m)
 					{
 						if (channels[j].clients[m].nickname == user)
@@ -30,7 +35,11 @@ void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 								if (client->client_fd == channels[j].clients[m].client_fd)
 									return;
 								channels[j].clients[m].isOperator = true;
-								channels[j].operators.push_back(channels[j].clients[m].client_fd);
+								// Check if the client_fd is already in the operators list before pushing
+								if (std::find(channels[j].operators.begin(), channels[j].operators.end(), channels[j].clients[m].client_fd) == channels[j].operators.end())
+								{
+									channels[j].operators.push_back(channels[j].clients[m].client_fd);
+								}
 								for (unsigned long t = 0; t < channels[j].clients.size(); t++)
 									sender(channels[j].clients[t].client_fd, Prefix(channels[j].clients[m]) + " MODE " + channel + " +o " + user + "\r\n");
 
@@ -38,13 +47,19 @@ void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 							}
 							else if (mode == "-o")
 							{
+								if (client->client_fd == channels[j].clients[m].client_fd)
+									return;
+								std::vector<int>::iterator it = std::find(channels[j].operators.begin(), channels[j].operators.end(), channels[j].clients[m].client_fd);
+								if (it != channels[j].operators.end())
+									channels[j].operators.erase(it); // Use the correct vector here
 								channels[j].clients[m].isOperator = false;
-								
 								for (unsigned long t = 0; t < channels[j].clients.size(); t++)
 									sender(channels[j].clients[t].client_fd, Prefix(channels[j].clients[m]) + " MODE " + channel + " -o " + user + "\r\n");
+								break; // Exit the loop after operations are done
 							}
 						}
 					}
+					break; // Exit the loop after operations are done
 				}
 			}
 		}

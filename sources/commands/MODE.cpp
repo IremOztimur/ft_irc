@@ -6,9 +6,10 @@ MODE::~MODE() {}
 
 void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 {
-	std::string channel, mode, user;
+	std::string channel, mode, user, modeParameter;
 	channel = command[0];
 	user = command[1];
+	modeParameter = command[1];
 	mode = command[2];
 	std::vector<Channel> &channels = server->getChannels();
 	for (std::vector<Channel>::size_type j = 0; j != channels.size(); ++j)
@@ -19,11 +20,28 @@ void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 			{
 				if (channels[j].operators[k] == client->client_fd)
 				{
-					if (user == "+i" || user == "-i")
+					if (modeParameter == "+i" || modeParameter == "-i")
 					{
-						channels[j].isPublic = (user == "+i") ? false : true;
+						channels[j].isPublic = (modeParameter == "+i") ? false : true;
 						for (unsigned long t = 0; t < channels[j].clients.size(); t++)
-							sender(channels[j].clients[t].client_fd, Prefix(*client) + " MODE " + channel + " " + user + "\r\n");
+							sender(channels[j].clients[t].client_fd, Prefix(*client) + " MODE " + channel + " " + modeParameter + "\r\n");
+						return;
+					}
+					else if (modeParameter == "+t" || modeParameter == "-t")
+					{
+						channels[j].onlyOps = (modeParameter == "+t") ? true : false;
+						for (unsigned long t = 0; t < channels[j].clients.size(); t++)
+							sender(channels[j].clients[t].client_fd, Prefix(*client) + " MODE " + channel + " " + modeParameter + "\r\n");
+						return;
+					}
+					else if (modeParameter == "+k" || modeParameter == "-k")
+					{
+						if (modeParameter == "+k")
+							channels[j].password = command[2];
+						else
+							channels[j].password = "";
+						for (unsigned long t = 0; t < channels[j].clients.size(); t++)
+							sender(channels[j].clients[t].client_fd, Prefix(*client) + " MODE " + channel + " " + modeParameter + " " + ((modeParameter == "+k") ? command[2] : "") + "\r\n");
 						return;
 					}
 					for (size_t m = 0; m != channels[j].clients.size(); ++m)

@@ -7,8 +7,6 @@ MODE::~MODE() {}
 void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 {
 	std::string channel, mode, user;
-	if (command.size() < 3)
-		return;
 	channel = command[0];
 	user = command[1];
 	mode = command[2];
@@ -19,10 +17,15 @@ void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 		{
 			for (size_t k = 0; k != channels[j].operators.size(); ++k)
 			{
-				std::cout << "K: " << k << std::endl;
-				std::cout << "operator k: " << channels[j].operators[k] << std::endl;
 				if (channels[j].operators[k] == client->client_fd)
 				{
+					if (user == "+i" || user == "-i")
+					{
+						channels[j].isPublic = (user == "+i") ? false : true;
+						for (unsigned long t = 0; t < channels[j].clients.size(); t++)
+							sender(channels[j].clients[t].client_fd, Prefix(*client) + " MODE " + channel + " " + user + "\r\n");
+						return;
+					}
 					for (size_t m = 0; m != channels[j].clients.size(); ++m)
 					{
 						if (channels[j].clients[m].nickname == user)
@@ -33,7 +36,8 @@ void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 									return;
 								channels[j].clients[m].isOperator = true;
 								// Check if the client_fd is already in the operators list before pushing
-								if (std::find(channels[j].operators.begin(), channels[j].operators.end(), channels[j].clients[m].client_fd) == channels[j].operators.end()) {
+								if (std::find(channels[j].operators.begin(), channels[j].operators.end(), channels[j].clients[m].client_fd) == channels[j].operators.end())
+								{
 									channels[j].operators.push_back(channels[j].clients[m].client_fd);
 								}
 								for (unsigned long t = 0; t < channels[j].clients.size(); t++)

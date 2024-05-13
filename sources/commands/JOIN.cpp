@@ -24,6 +24,11 @@ void JOIN::execute(std::vector<std::string> command, ClientInfo *client)
         {
             if (server->getChannels()[i].name == channel)
             {
+                if (server->getChannels()[i].isPublic == false)
+                {
+                    sender(client->client_fd, Prefix(*client) + ":server.name 473 " + client->nickname + " " + channel + " :Cannot join channel (+i) - you must be invited.\r\n");
+                    return;
+                }
                 for (size_t j = 0; j < server->getChannels()[i].clients.size(); j++)
                 {
                     if (server->getChannels()[i].clients[j].client_fd == client->client_fd)
@@ -74,6 +79,7 @@ void JOIN::execute(std::vector<std::string> command, ClientInfo *client)
             Channel newChannel;
             newChannel.name = channel;
             newChannel.topic = "";
+            newChannel.isPublic = true;
             newChannel.clients.push_back(*client);
             server->getChannels().push_back(newChannel);
 
@@ -82,6 +88,7 @@ void JOIN::execute(std::vector<std::string> command, ClientInfo *client)
             std::string modeMessage = "MODE " + channel + " +o " + client->nickname + "\r\n";
             server->getChannels()[server->getChannels().size() - 1].operators.push_back(client->client_fd);
             server->getChannels()[server->getChannels().size() - 1].clients[0].isOperator = true;
+            server->getChannels()[server->getChannels().size() - 1].isPublic = true;
             sender(client->client_fd, message);
             sender(client->client_fd, modeMessage);
             return;

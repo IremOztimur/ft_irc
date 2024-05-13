@@ -39,4 +39,6 @@ struct Channel
 	std::vector<int> operators;
 	std::string topic;
 	bool isPublic;
+	bool onlyOps;
+	std::string password;
 };

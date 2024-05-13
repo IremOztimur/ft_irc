@@ -6,10 +6,10 @@ TOPIC::~TOPIC() {}
 
 void TOPIC::execute(const std::vector<std::string> command, ClientInfo *client)
 {
-
+	(void)client;
 	std::string channel = command[0];
 	std::string topic = command[1];
-
+	bool isOperator = false;
 	if (topic[0] == ':')
 	{
 		topic = topic.substr(1);
@@ -18,30 +18,39 @@ void TOPIC::execute(const std::vector<std::string> command, ClientInfo *client)
 	{
 		if (server->getChannels()[i].name == channel)
 		{
-			bool isOperator = false;
-			for (size_t j = 0; j < server->getChannels()[i].operators.size(); ++j)
+			if (server->getChannels()[i].onlyOps == true)
 			{
-				std::cout << "server->getChannels()[i].operators[j] = " << server->getChannels()[i].operators[j] << std::endl;
-				if (server->getChannels()[i].operators[j] == client->client_fd && server->getChannels()[i].clients[j].isOperator)
+
+				for (size_t j = 0; j < server->getChannels()[i].operators.size(); ++j)
 				{
-					isOperator = true;
-					server->getChannels()[i].topic = topic;
-					if (server->getChannels()[i].topic.empty())
+					if (server->getChannels()[i].operators[j] == client->client_fd)
 					{
-						server->getChannels()[i].topic = "No topic is set";
+						isOperator = true;
+						break;
 					}
-					for (size_t k = 0; k < server->getChannels()[i].clients.size(); ++k)
-					{
-						sender(server->getChannels()[i].clients[k].client_fd, RPL_TOPIC(server->getChannels()[i].clients[k].hostname, server->getChannels()[i].clients[k].nickname, channel, topic));
-					}
-					break;
+				}
+
+				if (!isOperator)
+				{
+					perror("Error: TOPIC: client is not an operator");
+					sender(client->client_fd, ERR_CHANOPRIVSNEEDED(client->hostname, client->nickname, channel));
+					return;
 				}
 			}
-			if (!isOperator)
+		}
+		for (size_t j = 0; j < server->getChannels()[i].clients.size(); ++j)
+		{
+			server->getChannels()[i].topic = topic;
+			if (server->getChannels()[i].topic.empty())
 			{
-				sender(client->client_fd, ERR_CHANOPRIVSNEEDED(client->hostname, client->nickname, channel));
+				server->getChannels()[i].topic = "No topic is set";
+			}
+			for (size_t k = 0; k < server->getChannels()[i].clients.size(); ++k)
+			{
+				sender(server->getChannels()[i].clients[k].client_fd, RPL_TOPIC(server->getChannels()[i].clients[k].hostname, server->getChannels()[i].clients[k].nickname, channel, topic));
 			}
 			break;
 		}
+		break;
 	}
 }

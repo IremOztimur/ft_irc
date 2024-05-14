@@ -148,3 +148,12 @@ class TOPIC: public Command
 
 		void execute(std::vector<std::string> command, ClientInfo *client);
 };
+
+class INVITE: public Command
+{
+	public:
+		INVITE(Server *server, bool isAutherized);
+		~INVITE();
+
+		void execute(std::vector<std::string> command, ClientInfo *client);
+};

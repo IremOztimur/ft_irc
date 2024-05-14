@@ -44,6 +44,16 @@ void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 							sender(channels[j].clients[t].client_fd, Prefix(*client) + " MODE " + channel + " " + modeParameter + " " + ((modeParameter == "+k") ? command[2] : "") + "\r\n");
 						return;
 					}
+					else if (modeParameter == "+l" || modeParameter == "-l")
+					{
+						if (modeParameter == "+l")
+							channels[j].limit = std::stoi(command[2]);
+						else
+							channels[j].limit = 0;
+						for (unsigned long t = 0; t < channels[j].clients.size(); t++)
+							sender(channels[j].clients[t].client_fd, Prefix(*client) + " MODE " + channel + " " + modeParameter + " " + ((modeParameter == "+l") ? command[2] : "") + "\r\n");
+						return;
+					}
 					for (size_t m = 0; m != channels[j].clients.size(); ++m)
 					{
 						if (channels[j].clients[m].nickname == user)

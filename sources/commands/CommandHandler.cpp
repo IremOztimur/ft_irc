@@ -27,6 +27,7 @@ CommandHandler::CommandHandler(Server *server): server(server)
 	commands["TOPIC"] = new TOPIC(server, true);
 	commands["PART"] = new PART(server, true);
 	commands["KICK"] = new KICK(server, true);
+	commands["INVITE"] = new INVITE(server, true);
     commands["QUIT"] = new QUIT(server, true);
 }
 

@@ -42,3 +42,5 @@
 #define RPL_PASS(hostname, nickName) (std::string(":") + hostname + " 462 " + nickName + " :Password correct" + "\r\n")
 #define ERR_TOOMANYTARGETS(hostname, nickName, cmd) (std::string(":") + hostname + " 407 " + nickName + " " + cmd + " :Too many targets" + "\r\n")
 #define ERR_NOPRIVILEGES(hostName, nickName) "Error: No privileges for " + std::string(hostName) + " with nickname " + std::string(nickName)
+#define ERR_CANNOTSENDTOCHAN(hostname, nickname, target)  ("403 " + target + " :Cannot send to channel" + "\r\n")
+#define ERR_CHANNELISFULL(hostname, nickname, channel) ("471 " + hostname + " " + nickname + " " + channel + " :Cannot join channel: channel is full\r\n")

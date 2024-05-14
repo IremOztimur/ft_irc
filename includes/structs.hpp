@@ -40,5 +40,6 @@ struct Channel
 	std::string topic;
 	bool isPublic;
 	bool onlyOps;
+	size_t limit;
 	std::string password;
 };

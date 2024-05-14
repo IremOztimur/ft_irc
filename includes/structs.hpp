@@ -30,6 +30,7 @@ struct ClientInfo
 	int nick_correct;
 	bool isOperator;
 	bool isRegistered;
+	bool isInvited;
 };
 
 struct Channel
@@ -40,6 +41,6 @@ struct Channel
 	std::string topic;
 	bool isPublic;
 	bool onlyOps;
-	size_t limit;
 	std::string password;
+	size_t capacity;
 };

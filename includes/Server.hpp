@@ -13,7 +13,7 @@ class Server
 		std::vector<struct pollfd> poll_fd;
 		std::vector<Channel> channels;
         CommandHandler *commandHandler;
-		
+
 
 	public:
 		Server(std::string port, std::string password);
@@ -26,9 +26,9 @@ class Server
 		void setup();
 		void ClientAccept();
 		void MessageHandler();
-        void WELCOME(ClientInfo *client);
-    void removeClient(int client_fd);
-    const std::vector<ClientInfo>& getClients() const { return clients; }
+		void WELCOME(ClientInfo *client);
+		void removeClient(int client_fd);
+		std::vector<ClientInfo>& getClients() { return clients; }
 
 
     // Getters

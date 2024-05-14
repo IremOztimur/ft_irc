@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   JOIN.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ioztimur <ioztimur@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/14 16:05:38 by ioztimur          #+#    #+#             */
+/*   Updated: 2024/05/14 16:43:22 by ioztimur         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "../../includes/ft_irc.hpp"
 
 JOIN::JOIN(Server *server, bool isAutherized) : Command(server, isAutherized) {}
@@ -24,7 +37,7 @@ void JOIN::execute(std::vector<std::string> command, ClientInfo *client)
 		{
 			if (server->getChannels()[i].name == channel)
 			{
-				if (server->getChannels()[i].isPublic == false)
+				if (server->getChannels()[i].isPublic == false && client->isInvited == false)
 				{
 					sender(client->client_fd, Prefix(*client) + ":server.name 473 " + client->nickname + " " + channel + " :Cannot join channel (+i) - you must be invited.\r\n");
 					return;
@@ -45,13 +58,12 @@ void JOIN::execute(std::vector<std::string> command, ClientInfo *client)
 					sender(client->client_fd, Prefix(*client) + ":server.name 475 " + client->nickname + " " + channel + " :Cannot join channel (+k) - bad key.\r\n");
 					return;
 				}
-				else if (server->getChannels()[i].limit > 0 && server->getChannels()[i].clients.size() >= server->getChannels()[i].limit)
+				if (server->getChannels()[i].capacity < server->getChannels()[i].clients.size() + 1)
 				{
 					sender(client->client_fd, ERR_CHANNELISFULL(client->hostname, client->nickname, channel));
 					return;
 				}
 				server->getChannels()[i].clients.push_back(*client);
-				server->getChannels()[i].limit++;
 				sender(client->client_fd, Prefix(*client) + " JOIN " + channel + "\r\n");
 				if (server->getChannels()[i].topic != "")
 					sender(client->client_fd, RPL_TOPIC(client->hostname, client->nickname, server->getChannels()[i].name, server->getChannels()[i].topic));
@@ -91,7 +103,6 @@ void JOIN::execute(std::vector<std::string> command, ClientInfo *client)
 			newChannel.name = channel;
 			newChannel.topic = "";
 			newChannel.onlyOps = false;
-			newChannel.limit = 0;
 			newChannel.password = (command.size() == 2) ? command[1] : "";
 			newChannel.clients.push_back(*client);
 			server->getChannels().push_back(newChannel);

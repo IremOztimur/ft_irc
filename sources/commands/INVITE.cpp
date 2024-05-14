@@ -10,9 +10,9 @@ void INVITE::execute(std::vector<std::string> command, ClientInfo *client)
     std::string channel = command[1];
     for (unsigned int a = 0; a < server->getChannels().size(); a++)
     {
+        // to-do search if the channel exist using iterator
         if (server->getChannels()[a].name == channel)
         {
-            // İlgili kullanıcının kanalda olup olmadığını kontrol et
             bool foundClient = false;
             for (unsigned int k = 0; k < server->getChannels()[a].clients.size(); k++)
             {
@@ -35,7 +35,8 @@ void INVITE::execute(std::vector<std::string> command, ClientInfo *client)
                         {
                             if (server->getClients()[j].nickname == user)
                             {
-                                sender(server->getClients()[j].client_fd, Prefix(*client) + " " + "INVITE " + user + " " + channel + "\r\n");
+                                server->getClients()[j].isInvited = true;
+                                sender(server->getClients()[j].client_fd, Prefix(*client) + " " + "INVITE " + user + " :" + channel + "\r\n");
                                 break; // Kullanıcıyı bulduk, döngüyü sonlandır
                             }
                         }

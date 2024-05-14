@@ -12,4 +12,5 @@ void ClientInit(ClientInfo &user, int client_fd)
 	user.nick_correct = 0;
 	user.isOperator = false;
 	user.isRegistered = false;
+	user.isInvited = false;
 }

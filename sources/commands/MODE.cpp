@@ -47,9 +47,9 @@ void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 					else if (modeParameter == "+l" || modeParameter == "-l")
 					{
 						if (modeParameter == "+l")
-							channels[j].limit = std::stoi(command[2]);
+							channels[j].capacity = std::stoi(command[2]);
 						else
-							channels[j].limit = 0;
+							channels[j].capacity = INT_MAX;
 						for (unsigned long t = 0; t < channels[j].clients.size(); t++)
 							sender(channels[j].clients[t].client_fd, Prefix(*client) + " MODE " + channel + " " + modeParameter + " " + ((modeParameter == "+l") ? command[2] : "") + "\r\n");
 						return;

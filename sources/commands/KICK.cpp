@@ -67,7 +67,7 @@ void KICK::execute(std::vector<std::string> command, ClientInfo *client)
 		sender(client->client_fd, ERR_CHANOPRIVSNEEDED(client->hostname, client->nickname, channelName));
 		return;
 	}
-	if (target == client->nickname) // Hedef kullanıcı komutu gönderen kullanıcı ise
+	if (target == client->nickname)
 	{
 		sender(client->client_fd, "403 " + channelName + " :You cannot kick yourself\r\n");
 		return;
@@ -77,13 +77,11 @@ void KICK::execute(std::vector<std::string> command, ClientInfo *client)
 	sender(channels[i].clients[j].client_fd, kickMessage);
 	channels[i].clients.erase(channels[i].clients.begin() + j);
 
-	// Check if the user is an operator and remove them from the operator list
 	std::vector<int>::iterator opIt = std::find(channels[i].operators.begin(), channels[i].operators.end(), client->client_fd);
 	if (opIt != channels[i].operators.end())
 	{
 		channels[i].operators.erase(opIt);
 	}
-	// Send kick message to all other users in the channel
 	for (size_t k = 0; k < channels[i].clients.size(); k++)
 	{
 		std::string otherKickMessage = Prefix(*client) + " KICK " + channelName + " " + target + "\r\n";

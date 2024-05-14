@@ -9,7 +9,6 @@ void Server::WELCOME(ClientInfo *client)
 
 Server::Server(std::string port, std::string password) : port(port), password(password)
 {
-	// Initialize the commandHandler object
 	commandHandler = new CommandHandler(this);
 }
 Server::~Server()
@@ -79,7 +78,6 @@ void Server::MessageHandler()
 				{
 					if (isClientInChannel(clients[i - 1], channels[j]))
 					{
-						// Call PART command for each channel the client is in
 						PART partCommand(this, true);
 						std::vector<std::string> partArgs;
 						partArgs.push_back(channels[j].name);
@@ -99,7 +97,6 @@ void Server::MessageHandler()
 			{
 				std::string buffer = parseMessage(poll_fd[i].fd);
 
-				// Find the corresponding client and pass it to the command handler
 				for (size_t j = 0; j < clients.size(); j++)
 				{
 					if (clients[j].client_fd == poll_fd[i].fd)
@@ -139,6 +136,5 @@ void Server::ClientAccept()
 			poll_fd[poll_fd.size() - 1].fd = client_fd;
 			poll_fd[poll_fd.size() - 1].events = POLLIN;
 		}
-		printf("New connection %d\n", client_fd);
 	}
 }

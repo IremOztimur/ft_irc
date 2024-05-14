@@ -6,7 +6,7 @@
 /*   By: ioztimur <ioztimur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:05:38 by ioztimur          #+#    #+#             */
-/*   Updated: 2024/05/14 16:43:22 by ioztimur         ###   ########.fr       */
+/*   Updated: 2024/05/14 17:30:02 by ioztimur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void JOIN::execute(std::vector<std::string> command, ClientInfo *client)
 			server->getChannels().push_back(newChannel);
 
 			std::string message = Prefix(*client) + " JOIN " + channel + "\r\n";
-			// Yeni kullanıcıyı operatör yap
+
 			std::string modeMessage = "MODE " + channel + " +o " + client->nickname + "\r\n";
 			server->getChannels()[server->getChannels().size() - 1].operators.push_back(client->client_fd);
 			server->getChannels()[server->getChannels().size() - 1].clients[0].isOperator = true;

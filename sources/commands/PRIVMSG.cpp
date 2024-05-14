@@ -29,16 +29,13 @@ void PRIVMSG::execute(std::vector<std::string> command, ClientInfo *client)
         }
     }
 
-    // Hedef bir kanal mı yoksa kullanıcı mı olduğunu kontrol et
     if (targetExists)
     {
-        // Hedef bir kullanıcı ise mesajı gönder
         std::string fullMessage = Prefix(*client) + " PRIVMSG " + target + " :" + message + "\r\n";
         sender(server->getClients()[i].client_fd, fullMessage);
     }
     else
     {
-        // Hedef bir kanal ise mesajı gönder
         for (i = 0; i < server->getChannels().size(); i++)
         {
             if (server->getChannels()[i].name == target)

@@ -25,7 +25,7 @@ std::string parseMessage(int fd)
 	{
 		buffer[recvSize] = '\0';
 		std::string receivedData = buffer;
-		std::cout << "readed = " << receivedData << std::endl;
+		//std::cout << "readed = " << receivedData << std::endl;
 		size_t newlinePos = receivedData.find_first_of("\r\n");
 		std::string parsedMessage = receivedData.substr(0, newlinePos);
 
@@ -34,22 +34,6 @@ std::string parseMessage(int fd)
 	else
 		return "";
 }
-
-
-// bool isPropertyInUse(Server *server, const std::string& value, ClientInfo *client, const std::string& errormessage)
-// {
-//     std::vector<ClientInfo>::const_iterator it;
-//     for (it = server->getClients().begin(); it != server->getClients().end(); ++it)
-//     {
-//         if (it->username == value)
-//         {
-//             sender(client->client_fd, errormessage);
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
 
 int isClientInChannel(ClientInfo client, Channel channel)
 {

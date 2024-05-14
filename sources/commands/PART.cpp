@@ -8,7 +8,6 @@ void PART::execute(std::vector<std::string> command, ClientInfo *client)
 {
 	std::string channel = command[0]; // Çıkılacak kanalın ismi
 
-	// İstemciyi belirtilen kanaldan çıkar
 	for (unsigned long j = 0; j < server->getChannels().size(); j++)
 	{
 		if (server->getChannels()[j].name == channel)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsoymaz <fsoymaz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ioztimur <ioztimur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 15:22:54 by iremoztimur       #+#    #+#             */
-/*   Updated: 2024/05/07 22:51:08 by fsoymaz          ###   ########.fr       */
+/*   Updated: 2024/05/14 17:27:31 by ioztimur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int main(int argc, char **av)
 		try
 		{
 			isValidPort(av[1]);
-			// isValidPassword(av[2]);
+			isValidPassword(av[2]);
 			Server server(av[1], av[2]);
 			server.start();
 		}

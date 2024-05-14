@@ -7,8 +7,6 @@
 #include "macros.hpp"
 #include "utils.hpp"
 
-// to-do: add exception classes for more accurate representation of errors
-
 /**
  * Validates if the given string is a valid port number.
  *

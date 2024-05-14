@@ -1,6 +1,3 @@
-//
-// Created by fatih soymaz on 13.04.2024.
-//
 #include "../../includes/ft_irc.hpp"
 
 QUIT::QUIT(Server *server, bool isAutherized) : Command(server, isAutherized) {}
@@ -15,10 +12,9 @@ void Server::removeClient(int client_fd)
 		{
 			close(clients[i].client_fd);
 			clients.erase(clients.begin() + i);
-			break; // Bu break ifadesini kaldırın
+			break;
 		}
 	}
-	// Poll_fd dizisinden de ilgili girişi kaldırın
 	for (size_t i = 0; i < poll_fd.size(); ++i)
 	{
 		if (poll_fd[i].fd == client_fd)
@@ -45,7 +41,7 @@ void QUIT::execute(std::vector<std::string> command, ClientInfo *client)
 				partCommand.~PART();
 			}
 		}
-		
+
 		std::string message = Prefix(*client) + "QUIT" + " :" + "Client disconnected";
 		sender(client->client_fd, message);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsoymaz <fsoymaz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ioztimur <ioztimur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:05:08 by iremoztimur       #+#    #+#             */
-/*   Updated: 2024/05/09 23:12:02 by fsoymaz          ###   ########.fr       */
+/*   Updated: 2024/05/14 17:03:46 by ioztimur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,6 @@ class PRIVMSG: public Command
         ~PRIVMSG();
 
         void execute(std::vector<std::string> command, ClientInfo *client);
-};
-
-class NOTICE: public Command
-{
-	public:
-		NOTICE(Server *server, bool isAutherized);
-		~NOTICE();
-
-		void execute(std::vector<std::string> command, ClientInfo *client);
 };
 
 class WHO: public Command

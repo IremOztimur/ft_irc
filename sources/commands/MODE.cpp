@@ -63,15 +63,12 @@ void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 								if (client->client_fd == channels[j].clients[m].client_fd)
 									return;
 								channels[j].clients[m].isOperator = true;
-								// Check if the client_fd is already in the operators list before pushing
 								if (std::find(channels[j].operators.begin(), channels[j].operators.end(), channels[j].clients[m].client_fd) == channels[j].operators.end())
 								{
 									channels[j].operators.push_back(channels[j].clients[m].client_fd);
 								}
 								for (unsigned long t = 0; t < channels[j].clients.size(); t++)
 									sender(channels[j].clients[t].client_fd, Prefix(channels[j].clients[m]) + " MODE " + channel + " +o " + user + "\r\n");
-
-								// sender function needs to be implemented
 							}
 							else if (mode == "-o")
 							{
@@ -79,15 +76,15 @@ void MODE::execute(std::vector<std::string> command, ClientInfo *client)
 									return;
 								std::vector<int>::iterator it = std::find(channels[j].operators.begin(), channels[j].operators.end(), channels[j].clients[m].client_fd);
 								if (it != channels[j].operators.end())
-									channels[j].operators.erase(it); // Use the correct vector here
+									channels[j].operators.erase(it);
 								channels[j].clients[m].isOperator = false;
 								for (unsigned long t = 0; t < channels[j].clients.size(); t++)
 									sender(channels[j].clients[t].client_fd, Prefix(channels[j].clients[m]) + " MODE " + channel + " -o " + user + "\r\n");
-								break; // Exit the loop after operations are done
+								break;
 							}
 						}
 					}
-					break; // Exit the loop after operations are done
+					break;
 				}
 			}
 		}

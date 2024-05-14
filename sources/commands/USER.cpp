@@ -18,8 +18,6 @@ void USER::execute(std::vector<std::string> command, ClientInfo *client)
 		client->realname = command[3];
 		for (unsigned long i = 0; i < server->getClients().size(); i++)
 		{
-			std::cout << "Client: " << client->username << " is registered." << std::endl;
-			std::cout << "clientget: " << server->getClients()[i].username << std::endl;
 			if ((server->getClients()[i].username == client->username || server->getClients()[i].hostname == client->hostname || server->getClients()[i].realname == client->realname || server->getClients()[i].servername == client->servername) && server->getClients()[i].client_fd != client->client_fd)
 			{
 				sender(client->client_fd, ERR_ALREADYREGISTRED(client->hostname, client->nickname));

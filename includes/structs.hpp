@@ -25,22 +25,21 @@ struct ClientInfo
 	std::string realname;
 	std::string nickname;
 
-	int client_fd;
-	int user_correct;
-	int nick_correct;
-	bool isOperator;
-	bool isRegistered;
-	bool isInvited;
+	int			client_fd;
+	int			nick_correct;
+	bool		isOperator;
+	bool		isRegistered;
+	bool		isInvited;
 };
 
 struct Channel
 {
-	std::string name;
-	std::vector<ClientInfo> clients;
-	std::vector<int> operators;
-	std::string topic;
-	bool isPublic;
-	bool onlyOps;
-	std::string password;
-	size_t capacity;
+	std::string				name;
+	std::vector<ClientInfo>	clients;
+	std::vector<int>		operators;
+	std::string 			topic;
+	bool 					isPublic;
+	bool					onlyOps;
+	std::string				password;
+	size_t					capacity;
 };

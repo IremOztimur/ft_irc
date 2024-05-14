@@ -6,7 +6,7 @@
 /*   By: ioztimur <ioztimur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:05:08 by iremoztimur       #+#    #+#             */
-/*   Updated: 2024/05/14 17:03:46 by ioztimur         ###   ########.fr       */
+/*   Updated: 2024/05/14 18:44:11 by ioztimur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ class Server;
 class Command
 {
 	protected:
-		Server *server;
-		bool isAutherized;
+		Server	*server;
+		bool	isAutherized;
 
 	public:
 		Command(Server *server, bool isAutherized = true): server(server), isAutherized(isAutherized) {};

@@ -3,8 +3,8 @@
 class CommandHandler
 {
 	protected:
-		Server *server;
-		std::map<std::string, Command *> commands;
+		Server								*server;
+		std::map<std::string, Command *>	commands;
 
 	public:
 		CommandHandler(Server *server);
